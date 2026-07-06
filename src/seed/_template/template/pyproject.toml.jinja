@@ -1,0 +1,80 @@
+[build-system]
+# uv_build: 纯 Python 甜区。命中 C/Rust 扩展 / build hook / VCS 动态版本 /
+# 隐式 namespace 包(无 __init__.py) 任一 → 换 hatchling。
+requires = ["uv_build>=0.11.19,<0.12"]
+build-backend = "uv_build"
+
+[project]
+name = "{{ project_name }}"
+version = "0.1.0"
+description = "{{ description }}"
+readme = "README.md"
+requires-python = ">={{ python_min }}"
+license = "{% if license != 'Proprietary' %}MIT{% else %}LicenseRef-Proprietary{% endif %}"
+license-files = ["LICENSE"]
+authors = [{ name = "{{ author }}" }]
+classifiers = [
+{%- if not publish %}
+    "Private :: Do Not Upload",
+{%- endif %}
+    "Programming Language :: Python :: {{ python_min }}",
+]
+dependencies = [
+{%- if kind != 'lib' %}
+    "typer>=0.12",
+{%- endif %}
+    "pydantic-settings>=2.0",
+    "structlog>=24.0",
+]
+{% if kind != 'lib' %}
+[project.scripts]
+{{ cli_command }} = "{{ package_name }}.cli:run"
+{% endif %}
+[dependency-groups]
+# ruff/pyrefly 按需运行, 不进 dev-deps, 让 .venv 保持纯 Python。
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "pytest-mock",
+    "pytest-randomly",
+    "poethepoet",
+]
+{%- if kind != 'lib' %}
+# 出单文件 binary (脱 Python): uv run --group freeze poe freeze
+freeze = ["pyinstaller>=6.0"]
+{%- endif %}
+
+[tool.poe.tasks]
+lint = "uvx ruff@0.15.16 check ."
+fmt = "uvx ruff@0.15.16 format ."
+fmt-check = "uvx ruff@0.15.16 format --check ."
+typecheck = "uv run --with pyrefly==1.0.0 pyrefly check"
+test = "pytest"
+check = { sequence = ["lint", "fmt-check", "typecheck", "test"], help = "lint + format-check + typecheck + test" }
+{%- if kind != 'lib' %}
+freeze = { cmd = "pyinstaller --onefile --clean --name {{ cli_command }} src/{{ package_name }}/cli.py", help = "打单文件 binary 到 dist/" }
+{%- endif %}
+
+[tool.ruff]
+line-length = 88
+target-version = "py{{ python_min | replace('.', '') }}"
+
+[tool.ruff.lint]
+# TRY003: raise 现场的语境化短信息是通用惯用法, 不强制建异常类
+ignore = ["E501", "TRY003"]
+
+[tool.ruff.lint.per-file-ignores]
+# 测试桩为保接口签名留未用参数 (ARG); assert / 魔数是测试惯用法
+"tests/**" = ["S101", "PLR2004", "ARG"]
+# typer 命令的每个 CLI 选项就是一个参数, 参数多是框架惯用法, 不是 PLR0913 真问题
+"**/cli.py" = ["PLR0913"]
+
+[tool.ruff.lint.flake8-bugbear]
+# typer 的 x = typer.Option(...) 默认值是惯用法, 不是 B008 真问题
+extend-immutable-calls = ["typer.Argument", "typer.Option"]
+
+[tool.coverage.run]
+source = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,53 @@
+# seed — 统一 Python 仓脚手架模版 (Copier)
+# 用法: seed new <name>  /  seed status <root>
+_subdirectory: template
+_min_copier_version: "9.0.0"
+
+project_name:
+  type: str
+  help: "仓名 / 分发名 (kebab-case, 如 my-tool)"
+
+package_name:
+  type: str
+  help: "import 包名 (snake_case)"
+  default: "{{ project_name | lower | replace('-', '_') | replace(' ', '_') }}"
+
+description:
+  type: str
+  help: "一句话描述"
+  default: ""
+
+author:
+  type: str
+  default: Eridanus
+
+kind:
+  type: str
+  help: "仓形态"
+  choices:
+    "CLI 工具": cli
+    "可被 import 的库": lib
+  default: cli
+
+cli_command:
+  type: str
+  help: "CLI 命令名 (console_scripts)"
+  default: "{{ project_name }}"
+  when: "{{ kind != 'lib' }}"
+
+python_min:
+  type: str
+  help: "最低 Python 版本 (= .python-version 钉的开发版本)"
+  choices: ["3.12", "3.13"]
+  default: "3.12"
+
+publish:
+  type: bool
+  help: "是否发布到公网 PyPI (否 = 私有/未发布仓, 不生成 release workflow)"
+  default: false
+
+license:
+  type: str
+  help: "许可证: 决定 LICENSE 文件 + pyproject license 字段 (与 publish 解耦)"
+  choices: ["MIT", "Proprietary"]
+  default: "MIT"

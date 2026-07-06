@@ -1,0 +1,23 @@
+# {{ project_name }}
+
+{{ description }}
+
+## 开发
+
+    # 一次性(全机共用)
+    uv tool install git+<seed-repo-url>
+    uv tool install pre-commit --with pre-commit-uv
+
+    uv sync                # 各仓 .venv 只装纯 Python 依赖
+    uv run poe check       # ruff check + format-check + typecheck + test
+{% if kind != 'lib' %}
+## 运行
+
+    uv run {{ cli_command }}
+{% endif %}
+## 文档
+
+    docs/INDEX.md          # 文档入口
+    docs/architecture.md   # 开发地图
+
+> 由 seed 模版生成；后续一致性靠 `seed status` 审计，不做模版回灌。

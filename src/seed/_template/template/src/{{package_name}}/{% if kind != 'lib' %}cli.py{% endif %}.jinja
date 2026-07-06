@@ -1,0 +1,39 @@
+from __future__ import annotations
+
+import sys
+
+import typer
+
+from {{ package_name }} import telemetry
+from {{ package_name }}.logging_setup import setup_logging
+
+app = typer.Typer(no_args_is_help=True, add_completion=False, help="{{ description or project_name }}")
+
+
+@app.callback()
+def _root() -> None:
+    """保留子命令名空间 (typer 单命令会塌缩, 加 callback 防止)。"""
+
+
+@app.command()
+def hello(name: str = "world") -> None:
+    """示例命令。"""
+    setup_logging()
+    typer.echo(f"hello, {name}")
+
+
+@app.command()
+def stats() -> None:
+    """本地用量统计: per-verb 调用次数 / p50·p95 耗时 / 错误率 (零网络, 见 telemetry.py)。"""
+    typer.echo(telemetry.stats())
+
+
+def run() -> None:
+    """Console-script entry: 在 per-invocation telemetry 捕获下跑 CLI。
+    wrapper 负责 stdout/stderr 捕获 + exit-code 映射, 然后向本地 SQLite ledger 写一行
+    (${{ package_name | upper }}_TELEMETRY_OFF 或 DO_NOT_TRACK 关闭)。"""
+    raise SystemExit(telemetry.run_instrumented(app, sys.argv[1:]))
+
+
+if __name__ == "__main__":
+    run()
