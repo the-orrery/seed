@@ -6,3 +6,6 @@ pre-commit:
     ruff-format:
       run: uvx ruff@0.15.16 format --check {staged_files}
       glob: "*.py"
+    rhizome-check:
+      run: rhizome check {staged_files}
+      glob: "docs/**/*.md"
