@@ -11,6 +11,7 @@ htmlcov/
 .pyrefly_cache/
 .codegraph/
 .env
+lefthook-local.yml
 .repo-release-gate.local.toml
 .docket-release-gate.local.toml
 *.db
