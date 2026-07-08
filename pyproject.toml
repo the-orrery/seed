@@ -33,7 +33,7 @@ dev = [
     "pytest-randomly",
     "poethepoet",
 ]
-freeze = ["pyinstaller>=6.0"]
+freeze = ["pyinstaller>=6.21.0"]
 
 [tool.poe.tasks]
 lint = "uvx ruff@0.15.16 check ."
