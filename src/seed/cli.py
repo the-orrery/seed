@@ -5,8 +5,8 @@ import subprocess
 from pathlib import Path
 
 import typer
-
 from orrery_heartbeat import check_update
+
 from seed.audit import audit_repo, find_seed_repos
 
 app = typer.Typer(
