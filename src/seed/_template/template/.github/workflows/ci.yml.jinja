@@ -1,12 +1,20 @@
 name: CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-{% raw %}${{ github.workflow }}-${{ github.ref }}{% endraw %}
+  cancel-in-progress: true
+
 jobs:
   ci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v8.2.0
-        with:
-          enable-cache: true
-      - run: uv sync --locked
-      - run: uv run poe check
+    uses: the-orrery/.github/.github/workflows/python-ci.yml@77c7ac691d7da788412915d81ad5ac498187d179 # v8
+    with:
+      ruff-extend-ignore: "['TRY003']"
+      ruff-extend-per-file-ignores: "{'tests/**'=['ARG']}"
