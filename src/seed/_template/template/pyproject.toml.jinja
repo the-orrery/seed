@@ -60,7 +60,9 @@ line-length = 88
 target-version = "py{{ python_min | replace('.', '') }}"
 
 [tool.ruff.lint]
-# TRY003: raise 现场的语境化短信息是通用惯用法, 不强制建异常类
+# Canonical select/ignore 由 org reusable CI workflow 管理 (python-ci.yml);
+# 本地只配 extend-* 做 per-repo 豁免。poe check 跑的是本地默认规则集(E,F),
+# CI 规则集更宽 — 以 CI 为准。
 extend-ignore = ["TRY003"]
 
 [tool.ruff.lint.extend-per-file-ignores]
