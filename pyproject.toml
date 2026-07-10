@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "seed"
-version = "0.1.2"
+version = "0.1.3"
 description = "统一 Python 仓脚手架: Copier 模版 + uv 环境编排"
 readme = "README.md"
 requires-python = ">=3.12"
