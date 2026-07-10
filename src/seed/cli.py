@@ -5,7 +5,6 @@ import subprocess
 from pathlib import Path
 
 import typer
-from orrery_heartbeat import check_update
 
 from seed.audit import audit_repo, find_seed_repos
 
@@ -18,7 +17,6 @@ app = typer.Typer(
 
 @app.callback(invoke_without_command=True)
 def _callback(ctx: typer.Context) -> None:
-    check_update("seed", "the-orrery/seed")
     if ctx.invoked_subcommand is None:
         raise typer.Exit
 
