@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "seed"
-version = "0.1.1"
+version = "0.1.2"
 description = "统一 Python 仓脚手架: Copier 模版 + uv 环境编排"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -18,7 +18,6 @@ dependencies = [
     "typer>=0.26.8",
     "copier>=9.0",
     "pyyaml>=6.0",
-    "orrery-heartbeat @ git+https://github.com/the-orrery/orrery-heartbeat.git@2eb9141389416e529aaa8ac7c7a744cae2efd3e8",
 ]
 
 [project.scripts]
