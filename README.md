@@ -1,5 +1,9 @@
 # seed
 
+> **退役中 (ADR-050 VP3, REFIT-21 批3)**。单仓 monorepo (`orrery`) 收编全平台后, seed 的存在前提 (polyrepo 出生地 + 跨仓漂移审计) 已蒸发, copier 语义复刻是负资产;脚手架职能改由 workspace 约定承载, 新建仓数=0 → `seed new` 零前向需求。
+>
+> **当前状态**: CI 已降级 (cut `ci`/`codeql`/`scorecard`/`template-ci`;保 `security`;`release.yml` 保留至归档)。值守集 = 从本仓生成的存量仓 `{almagest, pharos}` (`.copier-answers.yml` 血缘锚);两者均有 ADR-050 终态 (almagest 收编入 orrery crate、pharos 批5 复议) → 值守集必收敛到 0, 清零后本仓归档。退役跟踪见 docket。代码与模板冻结, 不再接受功能改动。
+
 ## Install
 
 Install the verified `seed-<os>-<arch>` asset from
